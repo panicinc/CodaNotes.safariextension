@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Coda Notes</title>
+		
+		<style type="text/css">
+			body {		
+				margin: 0;
+				padding: 0;
+				font: 11px/15px 'Lucida Grande', sans-serif;
+			}
+			
+			.barButton {
+				display: block;
+				float: left;
+				clear: none;
+				margin: 0;
+				border: 1px solid #555;
+				-webkit-border-radius: 3px;
+				height: 22px;				
+				background-image: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#b8b8b8));
+				text-shadow: rgba(255,255,255, .5) 0 1px 0;
+				-webkit-box-shadow: rgba(255,255,255,.18) 0 1px 0;	
+			}
+			.barButton:active {
+				background: -webkit-gradient(linear, left top, left bottom, from(#b8b8b8), to(#818181));				
+			}
+			.blurred .barButton {
+				border-color: #a4a4a4;
+				background-image: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#d1d1d1));
+
+			}
+			
+			.btnImage {
+				display: inline-block;
+				width: 26px;
+				height: 20px;
+				background-position: 3px 2px;
+				background-repeat: no-repeat;
+			}
+			
+			/* A segment in a segmented button */
+			
+			.segmentedButton .barButton {
+				border-right-width: 0;			
+				-webkit-border-radius: 0;
+				height: 20px;
+			}
+			
+			.segmentedButton .barButton:first-child {
+				-webkit-border-top-left-radius: 3px;
+				-webkit-border-bottom-left-radius: 3px;
+			}
+			.segmentedButton .barButton:last-child {
+				-webkit-border-top-right-radius: 3px;
+				-webkit-border-bottom-right-radius: 3px;
+				border-right-width: 1px;				
+			}
+			
+			/* The main extension bar elements */
+			
+			#bar {
+				height: 25px;
+				padding-top: 4px;
+				padding-left: 8px;
+				padding-right: 8px;	
+			}
+			
+			/* Toolbar segment on the left */
+			
+			#tools {
+				float: left;
+				clear: none;
+			}
+			
+			#btnPen .btnImage {
+				background-image: url(images/btnPen.png);
+			}
+			#btnPen.selected1 .btnImage {
+				background-image: url(images/btnPen-selected-red.png);
+			}
+			#btnPen.selected2 .btnImage {
+				background-image: url(images/btnPen-selected-green.png);
+			}
+			#btnPen.selected3 .btnImage {
+				background-image: url(images/btnPen-selected-blue.png);
+			}
+
+			#btnHighlighter .btnImage {
+				background-image: url(images/btnHighlighter.png);
+			}
+			#btnHighlighter.selected1 .btnImage {
+				background-image: url(images/btnHighlighter-selected-yellow.png);
+			}
+			#btnHighlighter.selected2 .btnImage {
+				background-image: url(images/btnHighlighter-selected-blue.png);
+			}
+			#btnHighlighter.selected3 .btnImage {
+				background-image: url(images/btnHighlighter-selected-pink.png);
+			}
+			
+			#btnEraser .btnImage {
+				background-image: url(images/btnEraser.png);
+			}
+			#btnEraser.selected .btnImage {
+				background-image: url(images/btnEraser-selected.png);
+			}
+			
+			#btnNote .btnImage {
+				background-image: url(images/btnNote.png);
+			}
+			#btnNote.selected .btnImage {
+				background-image: url(images/btnNote-selected.png);
+			}
+			
+			#btnText .btnImage {
+				background-image: url(images/btnText.png);
+			}
+			#btnText.selected .btnImage {
+				background-image: url(images/btnText-selected.png);
+			}
+			
+			#btnClear {
+				float: left;
+				clear: none;
+				height: 20px;
+				margin: 0 10px;
+			}
+			#btnClear .btnImage {
+				background-image: url(images/btnClear.png);
+			}
+			
+			/* Send/Cancel on the right */
+			
+			#form {
+				float: right;
+				clear: none;
+			}
+			#hint {
+				margin-top: 4px;
+				padding: 0 8px;
+				width: auto;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				text-align: center;				
+				text-shadow: rgba(255,255,255,.3) 0 1px 0;
+			}
+			
+			#btnCancel {
+				margin-right: 8px;
+			}			
+			
+			#panicCodaNotes_highlight {
+				position: absolute;
+				background: rgba(95,185,255,.5); 
+				border: 1px solid blue;
+				z-index: 99999;
+			}
+			
+			/* Windows Styles */
+			
+			body.windows {
+				font-family: 'Segoe UI', 'MS Sans Serif', Arial, sans-serif !important; 
+			}
+			
+			body.windows .barButton {
+				border-color: #9ba5ae;
+				background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccd6de));
+				-webkit-box-shadow: rgba(0,0,0,.25) 0 0 1px;
+				font: 12px/15px 'Segoe UI', 'MS Sans Serif', Arial, sans-serif !important; 
+			}
+			
+			
+			
+			
+			
+		</style>
+		
+		<script src="jquery-1.4.2.js" type="text/javascript"></script>
+		
+		<script type="text/javascript">
+		var visible = false;
+		var sendTab;
+		var sendURL;
+		var editingTab;
+		var tabImageData;
+		var stateContents;
+		var penColor = safari.extension.settings['pen_color'];
+		var highlighterColor = safari.extension.settings['highlighter_color'];
+		var activeTool = "Pen";
+		
+		const bars = safari.extension.bars;
+		const activeBrowserWindow = safari.application.activeBrowserWindow;
+		const activeBrowserTab = activeBrowserWindow.activeTab;
+		
+		safari.application.addEventListener("message", handleMessage, false);
+
+		// Window-focus handling is buggy for now		
+		function handleMessage(event) {
+			if (event.name == 'currentMode') {
+				if (safari.application.activeBrowserWindow.activeTab == event.target) {
+					switchTool(event.message);
+				}
+			}else if (event.name == 'sendLoaded') {
+				safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('imageData', tabImageData);
+				safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('URL', sendURL);
+			}else if (event.name == 'sendComplete') {
+				var index = getTabIndex(sendTab);
+				sendTab.close();
+				editingTab.activate();
+				editingTab.page.dispatchMessage('cancelClicked');
+			}else if (event.name == 'sendCanceled') {
+				var index = getTabIndex(sendTab);
+				sendTab.close();
+				editingTab.activate();
+			}else if (event.name == 'setDefaultColors') {
+				penColor = safari.extension.settings['pen_color'];
+				highlighterColor = safari.extension.settings['highlighter_color'];
+			}
+		}
+		
+		function getTabIndex(tab){
+			var index;
+			for (index = 0; index < safari.application.activeBrowserWindow.tabs.length; index++) {
+				if (activeBrowserWindow.tabs[index] == tab){
+					break;
+				}
+			}
+			return index;
+		}
+		
+		$(document).ready(function(){
+			$('#btnCancel').click(function(){
+				safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('cancelClicked');
+			});
+			
+			$('#btnEraser').dblclick(function(){
+				safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('eraserDoubleClicked');
+			});
+			
+			$('#btnClear').click(function(){
+				safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('clearClicked');
+			});
+		});
+		
+		function switchTool(toolObj)
+		{
+			var toolName = toolObj['name'];
+			activeTool = toolName;
+			if (toolObj['penColor'] && typeof toolObj['penColor'] != 'undefined') {
+				penColor = toolObj['penColor'];
+				safari.extension.settings.setItem('pen_color', penColor);
+			}else if (activeTool == 'Pen'){
+				toolObj['penColor'] = penColor;
+			}
+			
+			if (toolObj['highlighterColor'] && typeof toolObj['highlighterColor'] != 'undefined') {
+				highlighterColor = toolObj['highlighterColor'];
+				safari.extension.settings.setItem('highlighter_color', highlighterColor);
+			}else if (activeTool == 'Highlighter'){
+				toolObj['highlighterColor'] = highlighterColor;
+			}
+			
+			// De-select all buttons
+			$("#tools .barButton").removeClass('selected').removeClass('selected1').removeClass('selected2').removeClass('selected3');
+			
+			// Select proper tool's button
+			if (toolName == 'Pen') {
+				$('#btn' + toolName).addClass('selected' + penColor);
+			}else if (toolName == 'Highlighter'){
+				$('#btn' + toolName).addClass('selected' + highlighterColor);
+			}else{
+				$('#btn' + toolName).addClass('selected');
+			}
+			
+			safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('toolSelected', toolObj);
+		}
+		
+		function switchToolButtonClicked(toolName) {
+			var toolObj = {'name' : toolName};
+			if (toolName == 'Pen') {
+				if (activeTool == 'Pen') {
+					if (penColor == 3) {
+						penColor = 1;
+					}else {
+						penColor += 1;
+					}
+				}
+				toolObj['penColor'] = penColor;
+				safari.extension.settings.setItem('pen_color', penColor);
+			}else if (toolName == 'Highlighter') {
+				if (activeTool == 'Highlighter') {
+					if (highlighterColor == 3) {
+						highlighterColor = 1;
+					}else {
+						highlighterColor += 1;
+					}
+				}
+				toolObj['highlighterColor'] = highlighterColor;
+				safari.extension.settings.setItem('highlighter_color', highlighterColor);
+			}
+			switchTool(toolObj);
+		}
+		
+		function send() {
+			safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("disableBar");
+			safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("barDisabled");
+			
+			setTimeout(function(){
+				imageData = safari.application.activeBrowserWindow.activeTab.visibleContentsAsDataURL();
+				url = safari.application.activeBrowserWindow.activeTab.url;
+				var pageInfo = [imageData, url];
+				safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('sendClicked', pageInfo);
+			}, 100);
+		}
+		
+		</script>
+	</head>
+<body>
+
+	<div id="bar">
+	
+		<div id="tools" class="segmentedButton">
+			<div id="btnPen" class="barButton selected" onclick="switchToolButtonClicked('Pen')" title="Pen Tool"><div class="btnImage"></div></div>
+			<div id="btnHighlighter" class="barButton selected" onclick="switchToolButtonClicked('Highlighter')"  title="Highlighter Tool"><div class="btnImage"></div></div>
+			<div id="btnEraser" class="barButton" onclick="switchToolButtonClicked('Eraser')"  title="Eraser Tool. Double-click here to erase all notes."><div class="btnImage"></div></div>
+			<div id="btnText" class="barButton" onclick="switchToolButtonClicked('Text')"  title="Text Edit Tool"><div class="btnImage"></div></div>
+			<div id="btnNote" class="barButton" onclick="switchToolButtonClicked('Note')"  title="Note Tool"><div class="btnImage"></div></div>
+		</div>
+
+		<div id="btnClear" class="barButton singleButton" title="Clear all notes"><div class="btnImage"></div></div>
+		
+		<div id="form">
+			<input type="button" id="btnCancel" value="Cancel" class="barButton" />
+			<input type="button" id="btnSend" value="Send Notes" class="barButton" onclick="send()" />
+		</div>
+		
+		<div id="hint">
+			Draw on the webpage below, then send your notes.
+		</div>
+	
+	</div>
+	
+</body>
+</html>

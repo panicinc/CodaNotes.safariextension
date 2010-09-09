@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Key</key>
+		<string>from_email</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<real>3</real>
+		<key>Key</key>
+		<string>pen_color</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<real>1</real>
+		<key>Key</key>
+		<string>highlighter_color</string>
+	</dict>
+</array>
+</plist>

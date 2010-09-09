@@ -1,0 +1,461 @@
+/* jQuery UI styles*/
+
+#panicCodaNotes_highlighterCanvas,
+#panicCodaNotes_canvas{
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	z-index:2147483644;
+}
+
+.panicCodaNotes_note{
+	position: absolute !important;
+	height: 110px !important;
+	width: 110px !important;
+	padding: 5px !important;
+	background: #fffbc6 -webkit-gradient(linear, left top, left bottom, from(#fffbc6), to(#ffef5c)) !important;
+	-webkit-box-shadow: rgba(0,0,0,.3) 0 2px 4px !important;
+	color: #342b19 !important;
+	font-family: 'Chalkboard', 'Marker Felt', Helvetica, sans-serif !important;
+	font-size: 14px;
+	line-height: 17px !important;
+	text-shadow: rgba(255,255,255,.5) 0 1px 0 !important;
+	z-index: 1 !important;
+	outline: 0 !important;
+	text-align: left !important;
+	word-wrap: break-word !important;
+}
+
+.panicCodaNotes_note.panicCodaNotes_dragged{
+	opacity: 0.66 !important;
+}
+
+.panicCodaNotes_noteContainer{
+	position: absolute !important;
+	overflow: visible !important;
+	height: 120px !important;
+	width: 120px !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	background: transparent !important;
+	z-index: 2147483644 !important;
+}
+
+#panicCodaNotes_sendBackground {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top:0;
+	left:0;
+	margin: 0;
+	padding: 0;
+	font: 12px/15px Helvetica, sans-serif;
+	background: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0)), to(rgba(0,0,0,.4))), url(images/background2.png);
+	z-index: 2147483645 !important;
+}
+
+#panicCodaNotes_screenshot {
+	position: absolute !important;
+	left: 0 !important;
+	top: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	-webkit-transform-origin: center center;
+	-webkit-transform-style: preserve-3d;
+	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-fill-mode: forwards;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+/*	background-size: 100% 100% !important;*/
+	-webkit-border-radius: 0px;
+	-webkit-box-shadow: rgba(0,0,0,.5) 0 3px 10px;
+}
+
+.panicCodaNotes_passthrough{
+	pointer-events: none;
+}
+
+.panicCodaNotes_close{
+	cursor: default !important;
+	position: absolute !important;
+	left: -11px !important; 
+	top: -9px !important;
+	width: 23px !important;
+	height: 23px !important;
+	background: url(images/closebox.png) no-repeat !important;
+	z-index: 1 !important;
+}
+
+/* Scrollbar */
+
+.panicCodaNotes_note::-webkit-scrollbar-track {
+	background: #fffbc6 -webkit-gradient(linear, left top, left bottom, from(#fffbc6), to(#ffef5c));
+    border: 0px solid;
+/*     -webkit-border-radius: 5px; */
+}
+
+.panicCodaNotes_note::-webkit-scrollbar {
+    width: 8px;
+}
+.panicCodaNotes_note::-webkit-scrollbar-track-piece:disabled {
+    display: none !important;
+}
+.panicCodaNotes_note::-webkit-scrollbar-thumb {
+	background: #fffbc6 -webkit-gradient(linear, left top, right top, from(rgba(255,200,0,.7)), to(rgba(255,200,0,.3)));
+    border: 0px solid;
+    -webkit-border-radius: 4px;
+}
+.panicCodaNotes_note::-webkit-scrollbar-thumb:hover {
+	background-color: rgb(220,220,220);
+}
+.panicCodaNotes_note::-webkit-scrollbar-thumb:active {
+	background-color: rgb(200,200,200);
+}
+
+/* !Postcard */
+
+#panicCodaNotes_postcardContainer {
+	opacity: 0;
+	display: table-cell;
+	width: 100%;
+	height: 100%;
+	vertical-align: middle;
+	-webkit-transform-style: preserve-3d;	
+	-webkit-animation-fill-mode: forwards;								
+}
+
+.panicCodaNotes_postcardContainer.flipped {
+	-webkit-animation-name: 'flip';
+	-webkit-animation-duration: 0.3s;
+	-webkit-animation-timing-function: ease-out;	
+}	
+#panicCodaNotes_postcardContainer.flyOut {
+	-webkit-animation-name: 'flyOut';
+	-webkit-animation-duration: 1s;
+	-webkit-animation-timing-function: ease;	
+}
+
+/*
+.flyIn {
+	-webkit-animation-name: 'flyIn';
+	-webkit-animation-duration: 1s;
+	-webkit-animation-timing-function: ease;	
+}
+*/
+
+#panicCodaNotes_postcard {
+	position: relative;
+	width: 500px;
+	height: 400px;
+	margin: 0 auto;
+	-webkit-border-radius: 14px;	
+	border: 8px solid #eee;
+	-webkit-box-shadow: rgba(0,0,0,.5) 0 3px 10px;
+	background: #eee;
+}
+.panicCodaNotes_postcardSide {
+	width: 500px;
+	height: 400px;
+	position: absolute;		
+	-webkit-backface-visibility: hidden;				
+}
+
+#panicCodaNotes_postcardFront {
+	background-color: white;
+/* 				background-image: url(images/screenshot2.png); */
+	background-repeat: no-repeat;
+	background-position: center top;
+	-webkit-background-size: 500px auto;			
+}
+#panicCodaNotes_postcardBack {
+	background: #eee;
+	-webkit-border-radius: 6px;
+	padding: 10px;
+	width: 480px;
+	height: 380px;
+	-webkit-transform: rotateY(180deg);	
+}
+
+/*#panicCodaNotes_screenshotContainer {
+	position: absolute;
+	-webkit-border-radius: 14px;
+	-webkit-box-shadow: rgba(0,0,0,.5) 0 3px 10px;				
+	width: 100%;
+	height: 100%;
+	z-index: 100002;			
+	
+	-webkit-transform-origin: center center;
+	-webkit-animation-fill-mode: forwards;
+}
+*/
+.flippedScreenShot {
+	-webkit-animation-name: 'flipScreenShot';
+	-webkit-animation-duration: .5s;
+	-webkit-animation-timing-function: ease-out;
+}
+
+@-webkit-keyframes 'flipScreenShot'
+{		
+	0% {
+
+	}
+	100% {
+		-webkit-transform: rotateY(90deg);
+	}
+
+}
+
+@-webkit-keyframes 'flip'
+{		
+	0% {
+		-webkit-transform: rotateY(90deg);
+	}
+	100% {
+		-webkit-transform: rotateY(179.9999deg);
+	}
+}
+
+@-webkit-keyframes 'flyOut'
+{		
+	0% {
+	}
+	100% {
+		-webkit-transform: translateX(100%) rotate(5deg);
+	}
+}
+
+@-webkit-keyframes 'flyIn'
+{		
+	0% {
+	}
+	100% {
+		-webkit-transform: translateX(-100%) rotate(-5deg);
+	}
+}
+
+#panicCodaNotes_postcardContainer.finished {
+	-webkit-transform: none;
+}
+#panicCodaNotes_postcardBack.finished {
+	-webkit-transform: none;
+}
+
+/* Form */
+
+#panicCodaNotes_postcard form, #panicCodaNotes_postcard form fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+#panicCodaNotes_postcard form .formRow {
+	float: right;
+	clear: none;
+	width: 230px;
+	margin-left: 20px;
+}
+
+#panicCodaNotes_postcard form label {
+	width: 60px;
+	color: #666;
+	float: left;
+	clear: none;
+	padding-top: 14px;
+}
+
+#panicCodaNotes_postcard form input {
+	border: 0;
+	margin: 0;
+	margin-top: 5px;
+	padding: 8px 4px;
+	font: 12px/15px Helvetica, sans-serif;
+	width: 220px;
+	outline: 0;
+/* 				border-bottom: 1px solid #ccc;			 */
+	border: 1px dotted #ccc;
+	background: #f5f5f5;
+	-webkit-border-radius: 3px;
+}
+#panicCodaNotes_postcard form input:focus {
+	background: white;
+}			
+
+#panicCodaNotes_postcard form textarea {
+	float: left;
+	clear: both;
+	width: 230px;
+	height: 378px;
+	padding-right: 10px;
+	border: 0;
+	border-right: 1px solid #ccc;
+	outline: 0;
+	background: #eee;
+	font: 12px/18px Helvetica, sans-serif;		
+	resize: none;	
+	-webkit-box-sizing: border-box;
+}
+
+#panicCodaNotes_postcard form h3 {
+	font: normal 12px/20px Helvetica, sans-serif;
+	color: #888;
+	height: 20px;
+	margin: 0;
+}
+
+#panicCodaNotes_postcardStamp {
+	width: 52px;
+	height: 56px;
+	float: right;
+	clear: none;
+	background: url(images/stamp.png) no-repeat;
+}
+						
+#panicCodaNotes_panicStamp {
+	width: 300px;			
+	height: 300px;
+	position: absolute;
+	top: -100px;
+	left: 290px;
+	background: url(images/panic-stamp.png) no-repeat top right;
+	-webkit-transform: scale(5) rotate(-14deg);
+	-webkit-transition-property: opacity, -webkit-transform;
+	-webkit-transition-function: linear;
+	-webkit-transition-duration: .5s;
+	opacity: 0;
+	display: none;
+}
+#panicCodaNotes_panicStamp.shown {
+	opacity: .9;
+	-webkit-transform: scale(.18) rotate(14deg);
+}
+
+.panicCodaNotes_button, .panicCodaNotes .ui-dialog-buttonpane button {
+	cursor: default;
+	-webkit-user-select: none;
+	padding: 5px 15px;
+	border: 1px solid #317cb5;
+	-webkit-border-radius: 3px;
+	background-color: #489bdf;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.65)), color-stop(.49,rgba(255,255,255,.1)), color-stop(.5, rgba(20,108,182,1)), to(rgba(20,108,182,0)));
+	color: white;
+	font-weight: bold;
+	-webkit-text-stroke: 1px transparent;
+	text-shadow: #002f5e 0 0 2px;
+	-webkit-box-shadow: rgba(255,255,255,1) 0 1px 0;	
+}
+.panicCodaNotes_button:active, .panicCodaNotes .ui-dialog-buttonpane input:active {
+	background-color: #156db7;		
+}
+.panicCodaNotes_button[disabled] {
+	background-color: #6d8da7;
+	color: rgba(255,255,255,.85);
+}
+
+.panicCodaNotes_button.subtle {
+	cursor: default;
+	-webkit-user-select: none;
+	padding: 5px 15px;
+	border: 1px solid #bbb;
+	-webkit-border-radius: 3px;
+	background-color: #ddd;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.65)), color-stop(.49,rgba(255,255,255,.1)), color-stop(.5, rgba(0,0,0,.05)), to(rgba(20,108,182,0)));
+	color: #727272;
+	font-weight: bold;
+/* 				-webkit-text-stroke: 1px transparent; */
+	text-shadow: white 0 1px 0px;
+	-webkit-box-shadow: rgba(255,255,255,1) 0 1px 0;	
+}
+.panicCodaNotes_button.subtle:active {
+	background-color: #ccc;		
+}
+.panicCodaNotes_button.subtle[disabled] {
+	background-color: #eee;
+	color: #aaa;
+}
+
+.panicCodaNotes .ui-dialog-buttonpane button {
+	font:bold 12px/15px Helvetica, sans-serif;
+}
+
+#panicCodaNotes_postcardSubmit {
+	float: right;
+	clear: none;
+	margin-top: 50px;				
+}
+
+#panicCodaNotes_postcardCancel {
+	float: left;
+	clear: none;
+	margin-top: 50px;
+	margin-left: 20px;
+	padding-left: 26px;
+	padding-right: 26px;
+}
+
+/*
+.ui-widget-overlay {
+	background: rgba(0,0,0,.5);
+}
+*/
+
+#panicCodaNotes_dialog {
+	min-height: 50px !important;
+}
+
+#panicCodaNotes_dialog h2.title{
+	margin-bottom: 0.83em !important;
+	margin-top: 0 !important;
+	font-weight: bold !important;
+	font-size: 1.5em !important;
+}
+
+.panicCodaNotes.ui-dialog {
+	background-color: rgba(245,245,245,.95) !important;
+	background-image: url(Icon-48.png) !important;
+	background-position: 20px 23px !important;
+	background-repeat: no-repeat !important;
+	padding: 10px 20px 20px 86px !important;
+	font: 12px/15px Helvetica, sans-serif !important;
+	border: 1px solid #888 !important;
+	-webkit-box-shadow: rgba(0,0,0,.5) 0 2px 7px !important;
+	color: black !important;
+}
+
+.panicCodaNotes .ui-dialog input {
+	
+}
+
+.panicCodaNotes .ui-icon-closethick {
+	display: none;
+}
+
+#panicCodaNotes_postcard form #copyMeBox.formRow {
+	padding-top: 10px;
+}
+
+#panicCodaNotes_postcard form label#copyLabel {
+	width: 212px;
+	float: right;
+	clear: none;
+	position: relative;
+	top: -14px;
+}
+
+#panicCodaNotes_postcard form input[type="checkbox"] {
+	border: 0;
+	margin: 0;
+	margin-top: 0px;
+	margin-right: 3px;
+	padding: 0px;
+	width: 15px;
+	outline: 0;
+	border: 0px;
+	background: none;
+	-webkit-border-radius: 0px;
+	float: left;
+	clear: none;
+}
+
+
