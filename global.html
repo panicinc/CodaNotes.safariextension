@@ -6,9 +6,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
 	<title>global</title>
-	<script src="jquery-1.4.2.js" type="text/javascript"></script>
+	<script src="jquery-1.8.2.min.js" type="text/javascript"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function(){
+			//console.log('global.html ready begin');
+
 			safari.application.addEventListener("command", performCommand, false);
 			safari.application.addEventListener("validate", validateCommand, false);
 			safari.application.addEventListener("message", handleMessage, false);
@@ -16,10 +18,19 @@
 			
 			var enabledTabs = new Array();
 			
+			function copySettings () {
+				var settings = new Array();
+				settings['pen_color'] = safari.extension.settings['pen_color'];
+				settings['highlighter_color'] = safari.extension.settings['highlighter_color'];
+				settings['from_email'] = safari.extension.settings['from_email'];
+				settings['coda_notes_serial_number'] = safari.extension.settings['coda_notes_serial_number'];
+				return settings;
+			}
+			
 			function settingsChanged (event) {
 				for (var windowIndex = 0; windowIndex < safari.application.browserWindows.length; windowIndex++){
 					for (var tabIndex = 0; tabIndex < safari.application.browserWindows[windowIndex].tabs.length; tabIndex++){
-						safari.application.browserWindows[windowIndex].tabs[tabIndex].page.dispatchMessage("settingsUpdated", safari.extension.settings);
+						safari.application.browserWindows[windowIndex].tabs[tabIndex].page.dispatchMessage("settingsUpdated", copySettings());
 					}
 				}
 			}
@@ -40,7 +51,7 @@
 				
 				event.target.disabled = true;
 				var bar = getBarForTab(event.target);
-				debugger;
+
 				for (var windowIndex = 0; windowIndex < safari.application.browserWindows.length; windowIndex++){
 					var tab = safari.application.browserWindows[windowIndex].activeTab;
 					if (tab.url && tab.page) {
@@ -67,7 +78,7 @@
 			function handleMessage(event) {
 				var bar = getBarForTab(event.target);
 				
-				// console.log(event.name);
+				//console.log('global.html handleMessage: ' + event.name);
 				// console.log(event.message);
 				
 				if (event.name == 'barEnabled') {
@@ -120,7 +131,7 @@
 						button.image = safari.extension.baseURI + 'images/btnCodaNotes-unsaved.png';
 					}
 				}else if (event.name == 'documentReady') {
-					event.target.page.dispatchMessage('settingsUpdated', safari.extension.settings);
+					event.target.page.dispatchMessage('settingsUpdated', copySettings()/*, safari.extension.settings*/);
 					event.target.page.dispatchMessage("modeRequest");
 					if (safari.application.activeBrowserWindow.activeTab != event.target) {
 						return;
@@ -173,6 +184,15 @@
 					if (bar.browserWindow === activeBrowserWindow && bar.identifier === "codaNotes"){
 						return bar;
 					}
+				}
+			}
+			
+			// Reload all tabs
+			
+			for (var windowIndex = 0; windowIndex < safari.application.browserWindows.length; windowIndex++){
+				for (var tabIndex = 0; tabIndex < safari.application.browserWindows[windowIndex].tabs.length; tabIndex++){
+					var tab = safari.application.browserWindows[windowIndex].tabs[tabIndex];
+					tab.url = tab.url;
 				}
 			}
 		});

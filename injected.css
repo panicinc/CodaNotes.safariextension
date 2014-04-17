@@ -45,6 +45,7 @@
 
 #panicCodaNotes_sendBackground {
 	position: absolute;
+	display: table;
 	width: 100%;
 	height: 100%;
 	top:0;
@@ -117,10 +118,13 @@
 /* !Postcard */
 
 #panicCodaNotes_postcardContainer {
-	opacity: 0;
-	display: table-cell;
+/* 	position: absolute; */
+	left: 0;
+	top: 0;
 	width: 100%;
 	height: 100%;
+	opacity: 0;
+	display: table-cell;
 	vertical-align: middle;
 	-webkit-transform-style: preserve-3d;	
 	-webkit-animation-fill-mode: forwards;								
@@ -146,10 +150,10 @@
 */
 
 #panicCodaNotes_postcard {
-	position: relative;
+/* 	position: relative; */
 	width: 500px;
 	height: 400px;
-	margin: 0 auto;
+	margin: 0px auto;
 	-webkit-border-radius: 14px;	
 	border: 8px solid #eee;
 	-webkit-box-shadow: rgba(0,0,0,.5) 0 3px 10px;
@@ -315,9 +319,9 @@
 #panicCodaNotes_panicStamp {
 	width: 300px;			
 	height: 300px;
-	position: absolute;
-	top: -100px;
-	left: 290px;
+	position: relative;
+	top: -480px;
+	left: 285px;
 	background: url(images/panic-stamp.png) no-repeat top right;
 	-webkit-transform: scale(5) rotate(-14deg);
 	-webkit-transition-property: opacity, -webkit-transform;
